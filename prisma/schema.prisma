@@ -32,7 +32,6 @@ model Session {
   user User @relation(fields: [username], references: [username])
 }
 
-
 model House {
   id Int @id @default(autoincrement())
   nameDisplay String @db.VarChar(100)
