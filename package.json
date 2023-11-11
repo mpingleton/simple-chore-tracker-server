@@ -1,0 +1,11 @@
+{
+  "name": "simple-chore-tracker-server",
+  "version": "0.0.1",
+  "description": "Server for the Simple Chore Tracker app.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Pingleton",
+  "license": "MIT"
+}
