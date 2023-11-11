@@ -9,6 +9,7 @@ module.exports = async (prismaClient, username) => {
 
     return {
         username: data.username,
+        nameDisplay: data.nameDisplay,
         passphraseHash: data.passphraseHash,
         isEnabled: data.isEnabled,
     };
