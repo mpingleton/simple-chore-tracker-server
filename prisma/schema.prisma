@@ -9,3 +9,74 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  username String @db.VarChar(100) @id
+  nameDisplay String @db.VarChar(100)
+  passphraseHash String @db.VarChar(128)
+  isEnabled Boolean
+
+  sessions Session[]
+  houseAssignments UserHouseAssignment[]
+  assignedChores Chore[] @relation("assignedUserChore")
+  reviewingChores Chore[] @relation("reviewingUserChore")
+}
+
+model Session {
+  id Int @id @default(autoincrement())
+  username String @db.VarChar(100)
+  isActive Boolean
+  started DateTime
+  token String @db.VarChar(400) @unique
+
+  user User @relation(fields: [username], references: [username])
+}
+
+
+model House {
+  id Int @id @default(autoincrement())
+  nameDisplay String @db.VarChar(100)
+
+  userAssignments UserHouseAssignment[]
+  recurringChores RecurringChore[]
+  scheduledChores Chore[]
+}
+
+model UserHouseAssignment {
+  id Int @id @default(autoincrement())
+  username String @db.VarChar(100)
+  houseId Int
+  isReviewer Boolean
+  isAdmin Boolean
+
+  user User @relation(fields: [username], references: [username])
+  house House @relation(fields: [houseId], references: [id])
+}
+
+model RecurringChore {
+  id Int @id @default(autoincrement())
+  houseId Int
+  subject String @db.VarChar(100)
+  perTimeUnit String @db.VarChar(10)
+  timeBegin DateTime @db.Timestamptz()
+  isActive Boolean
+
+  house House @relation(fields: [houseId], references: [id])
+  scheduledChores Chore[]
+}
+
+model Chore {
+  id Int @id @default(autoincrement())
+  houseId Int
+  recurringChoreId Int
+  subject String @db.VarChar(100)
+  timeDue DateTime
+  timeCompleted DateTime?
+  assignedUserId String? @db.VarChar(100)
+  reviewingUserId String? @db.VarChar(100)
+
+  house House @relation(fields: [houseId], references: [id])
+  recurringChore RecurringChore @relation(fields: [recurringChoreId], references: [id])
+  assignedUser User? @relation("assignedUserChore", fields: [assignedUserId], references: [username])
+  reviewingUser User? @relation("reviewingUserChore", fields: [reviewingUserId], references: [username])
+}
