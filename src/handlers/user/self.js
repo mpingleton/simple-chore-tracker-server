@@ -16,7 +16,10 @@ const handler = (prismaClient) => {
             return;
         }
 
-        const responseData = { username: userData.username };
+        const responseData = {
+            username: userData.username,
+            nameDisplay: userData.nameDisplay,
+        };
 
         res.send(200, responseData);
     };
