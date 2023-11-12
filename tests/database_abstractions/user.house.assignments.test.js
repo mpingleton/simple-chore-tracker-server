@@ -13,10 +13,11 @@ const getHousesAssignedToUserByUsername = require('../../src/database_abstractio
 const getUsersAssignedToHouseById = require('../../src/database_abstractions/house/getUsersAssignedToHouseById');
 
 test('Create a couple of houses, a couple of users, and assign those users to those houses.', async () => {
-    const passphraseHash = crypto.pbkdf2Sync('1234567890', process.env.PASSPHRASE_SECRET_KEY, 100000, 64, 'sha512').toString('hex');
+    const passphraseHash = crypto.createHash('sha512').update('1234567890').digest('hex');
+    const passphraseSaltyHash = crypto.pbkdf2Sync(passphraseHash, process.env.PASSPHRASE_SECRET_KEY, 100000, 64, 'sha512').toString('hex');
 
-    const insertUserData1 = await insertUser(prismaClient, 'jane.smith', 'Jane Smith', passphraseHash, true);
-    const insertUserData2 = await insertUser(prismaClient, 'dane.smith', 'Dane Smith', passphraseHash, true);
+    const insertUserData1 = await insertUser(prismaClient, 'jane.smith', 'Jane Smith', passphraseSaltyHash, true);
+    const insertUserData2 = await insertUser(prismaClient, 'dane.smith', 'Dane Smith', passphraseSaltyHash, true);
     const insertHouseData1 = await insertHouse(prismaClient, '11 Main St');
     const insertHouseData2 = await insertHouse(prismaClient, '33 Cross St');
 
