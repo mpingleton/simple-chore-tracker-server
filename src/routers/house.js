@@ -5,7 +5,7 @@ const validate = require('../middleware/validate');
 
 const createHouse = require('../handlers/house/createHouse');
 const getHousesInUserByUsername = require('../handlers/house/getHousesInUserByUsername');
-const getUsersInHouseById = require('../handlers/house/get')
+const getUsersInHouseById = require('../handlers/house/getUsersInHouseById');
 
 const initHouseRouters = (prismaClient) => {
     const router = express.Router();
